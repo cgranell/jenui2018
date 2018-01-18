@@ -1,0 +1,78 @@
+---
+title: "Analysing SUCRE4Kids experimenta data for JENUI 2018"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+# pacman package management tool to install and load the package dependencies.
+if(!require(pacman)) {
+  install.packages("pacman")
+  library(pacman)
+}
+
+# Load and install packages from CRAN
+p_load(
+  "tidyverse",
+  "here",
+  "lubridate",
+  "knitr",
+  "kableExtra"
+)
+# library(pdftools)
+# library(stringr)
+# library(tidyverse)
+# library(knitr)
+# library(tidytext)
+
+```
+
+## Load data
+
+Observations taken during programming sessions with students were collected on paper and digitally stored in a csv file. Create tidy data structure form file
+
+```{r}
+file_name <- "datos-practica-uji.csv"
+data_path <- here::here("data", file_name)
+
+tb <- read_csv(data_path)
+head(tb, 8)
+
+
+tb <- tb %>%
+  mutate(date = as.Date(fecha, format = "%d/%m/%Y"),
+         year = year(ymd(date)),
+         duracion_media = mean (duracion))
+
+# https://cran.r-project.org/web/packages/kableExtra/README.html
+kable(tb %>% select(-duracion_1, -duracion_2, -duracion_3, -chicos, -chicas, -conocimiento, -lugar, -date, -duracion_media),
+      format = "html", 
+      booktabs = TRUE, 
+      caption = "Sesiones")
+  #kable_styling(latex_options = "scale_down")
+  #kable_styling(latex_options = c("striped", "hold_position"), full_width = FALSE)
+
+```
+
+## Resources
+
+- https://rpubs.com/edgarruiz/tidytext
+- https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html
+- https://onertipaday.blogspot.de/2011/07/word-cloud-in-r.html
+
+\newpage
+## Meta
+
+```{r}
+sessionInfo()
+```
+
+```{r, eval=FALSE, echo=FALSE}
+# upload the source file and pdf output to drive
+#drive_upload(media = "03-tidytext.Rmd", path = data_path, name = paste0("text-analysis.Rmd"))
+#drive_upload(media = "03-tidytext.pdf", path = data_path, name = paste0("text-analysis.pdf"))
+
+
+```
+
