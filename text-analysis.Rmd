@@ -1,11 +1,12 @@
 ---
 title: "Analysing SUCRE4Kids experimenta data for JENUI 2018"
 output:
+  html_document: default
   html_notebook: default
   pdf_document: default
 ---
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # pacman package management tool to install and load the package dependencies.
 if(!require(pacman)) {
   install.packages("pacman")
@@ -49,17 +50,21 @@ tb <- tb %>%
 kable(tb %>% select(-duracion_1, -duracion_2, -duracion_3, -chicos, -chicas, -conocimiento, -lugar, -date, -duracion_media),
       format = "html", 
       booktabs = TRUE, 
-      caption = "Sesiones")
-  #kable_styling(latex_options = "scale_down")
+      caption = "Lista de sesiones con ") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE)
   #kable_styling(latex_options = c("striped", "hold_position"), full_width = FALSE)
+
+
 
 ```
 
 ## Resources
 
-- https://rpubs.com/edgarruiz/tidytext
-- https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html
-- https://onertipaday.blogspot.de/2011/07/word-cloud-in-r.html
+* https://rpubs.com/edgarruiz/tidytext
+* https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html
+* https://onertipaday.blogspot.de/2011/07/word-cloud-in-r.html
+* [Create Awesome HTML Table with knitr::kable() and kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html)
+* [Create Awesome LaTeX Table with knitr::kable() and kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_pdf.pdf)
 
 \newpage
 ## Meta
