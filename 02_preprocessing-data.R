@@ -31,7 +31,7 @@ tb <- tb %>%
 kable(tb %>% select(-duracion_1, -duracion_2, -duracion_3, -chicos, -chicas, -conocimiento, -lugar, -date, -duracion_media),
       format = "latex", 
       booktabs = TRUE, 
-      caption = "Sesiones") #%>%
+      caption = "Sesiones") %>%
   kable_styling(full_width = T)
   #kable_styling(latex_options = "scale_down")
   #kable_styling(latex_options = c("striped", "hold_position"), full_width = FALSE)
