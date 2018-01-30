@@ -24,18 +24,40 @@ head(nrow(tb))
 
 
 tb <- tb %>%
-  mutate(date = lubridate::dmy(fecha), 
+  mutate(fecha_final = lubridate::dmy(fecha), 
            # date= as.Date(fecha, format = "%d/%m/%Y"),
-         year = year(date)) %>%
-  select(-fecha)
+         anyo = year(fecha_final)) %>%
+  select(-fecha) %>%
+  rename(dur_total = duracion, dur1 = duracion_1, dur2 = duracion_2, dur3 = duracion_3) %>%
+  arrange(fecha_final)
+
+tb <- tb %>%
+  mutate(dur1_per = dur1 / dur_total,
+         dur2_per = dur2 / dur_total,
+         dur3_per = dur3 / dur_total)
+         # date= as.Date(fecha, format = "%d/%m/%Y"),
 tb
 
+scales::percent(tb$dur1_per)
+
+
+ggplot(evaldata_years_long, aes(year, value)) +
+  geom_bar(aes(fill = variable), stat = "identity") +
+  ylab("mean value") +
+
+ggplot(tb, aes(x=id, y=dur_total)) + 
+  geom_bar(aes(fill = anyo), stat = "identity") +
+  labs(x = "Sesiones", y="Duración (min)") +
+  theme_bw()
+
+
+ggplot(tb, )
 
 dur_year <- tb %>%
   group_by(year) %>%
   summarise( 
     count = n(),
-    dur_media = mean(duracion, na.rm = TRUE),
+    dur_med = mean(dur_total, na.rm = TRUE),
     dur1_per = sum(duracion_1) / sum(duracion),
     dur2_per = sum(duracion_2) / sum(duracion),
     dur3_per = sum(duracion_3) / sum(duracion)
