@@ -93,7 +93,7 @@ ggplot(tb_dur, aes(x=num_sesion, y=porcentaje)) +
   geom_text(aes(x=num_sesion, y=porcentaje, label = ifelse(porcentaje>0, paste(porcentaje, "%"), "")), 
             position = position_stack(vjust = 0.5)) +
   theme(legend.position="bottom", 
-        legend.direction="horizontal",
+        legend.direction="vertical",
         legend.title = element_blank()) +
   # coord_flip() +
   scale_y_continuous(labels = dollar_format(suffix = "%", prefix="")) +
