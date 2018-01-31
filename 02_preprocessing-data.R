@@ -21,8 +21,6 @@ file_name <- "datos-practica-uji.csv"
 data_path <- here::here("data", file_name)
 
 tb <- read_csv(data_path)
-head(nrow(tb))
-
 
 tb <- tb %>%
   mutate(fecha_final = lubridate::dmy(fecha), 
@@ -32,31 +30,45 @@ tb <- tb %>%
   rename(num_sesion = id, dur_total = duracion, dur1 = duracion_1, dur2 = duracion_2, dur3 = duracion_3) %>%
   arrange(fecha_final)
 
-kable(tb %>% select(num_sesion, dur_total, alumnos, cursos, conocimiento))
+tb_table <- tb %>%
+  mutate(perfil = paste(cursos, "-", conocimiento)) %>%
+  select(`Año-sessión` = num_sesion, 
+         `Duración (min)` = dur_total, 
+         `Num. alumnos `=alumnos, 
+         `Perfil alumnos`=perfil)
+
+kable(tb_table)
+
+# Add these packages in the latex source document
+# \usepackage{graphicx}
+# \usepackage{booktabs}
+# \usepackage{colortbl}
+# \usepackage[table]{xcolor}
+
 # https://cran.r-project.org/web/packages/kableExtra/README.html
-kable(tb %>% select(num_sesion, dur_total, alumnos, cursos, conocimiento),
+kable(tb_table,
       format = "latex", 
       booktabs = TRUE, 
-      caption = "Sesiones") %>%
-  kable_styling(full_width = T)
-#kable_styling(latex_options = "scale_down")
-#kable_styling(latex_options = c("striped", "hold_position"), full_width = FALSE)
+      caption = "Descripción de las sesiones") %>%
+  kable_styling(position = "center", 
+                font_size = 7,
+                latex_options = c("striped","hold_position"))
 
+
+# Temporal distribtion of each section per session
 tb_dur <- tb %>%
-  # mutate(dur1_per = dur1 / dur_total,
-  #        dur2_per = dur2 / dur_total,
-  #        dur3_per = dur3 / dur_total) %>%
   select(-alumnos, -chicos, -chicas, -conocimiento, -cursos, -lugar) %>%
   select(num_sesion, fecha_final, anyo, everything())
-         # date= as.Date(fecha, format = "%d/%m/%Y"),
 
-tb_dur2 <- tb_dur %>%
+tb_dur <- tb_dur %>%
   gather(dur1, dur2, dur3, key = "tipo_seccion", value = "dur_seccion") %>%
   arrange(fecha_final, tipo_seccion)
+tb_dur
 
-tb_dur2 <- tb_dur2 %>%
+tb_dur2 <- tb_dur %>%
   mutate (dur_per = dur_seccion / dur_total * 100)
 
+tb_dur2
 
 # http://t-redactyl.io/blog/2016/01/creating-plots-in-r-using-ggplot2-part-4-stacked-bar-plots.html
 ggplot(tb_dur2, aes(x=num_sesion, y=dur_per)) + 
