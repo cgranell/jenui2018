@@ -46,9 +46,13 @@ kable(tb_table)
 # \usepackage[table]{xcolor}
 
 # https://cran.r-project.org/web/packages/kableExtra/README.html
+
+# Use the above command to generate the table in latex for the paper
 kable(tb_table,
+      
       format = "latex", 
       booktabs = TRUE, 
+      escape = TRUE,
       caption = "Descripción de las sesiones") %>%
   kable_styling(position = "center", 
                 font_size = 7,
