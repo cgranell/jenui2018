@@ -32,7 +32,7 @@ tb <- tb %>%
 
 tb_table <- tb %>%
   mutate(perfil = paste(cursos, "-", conocimiento)) %>%
-  select(`Año-sessión` = num_sesion, 
+  select(`Año-sesión` = num_sesion, 
          `Duración (min)` = dur_total, 
          `Num. alumnos `=alumnos, 
          `Perfil alumnos`=perfil)
