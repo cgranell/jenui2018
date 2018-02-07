@@ -30,6 +30,14 @@ tb <- tb %>%
   rename(num_sesion = id, dur_total = duracion, dur1 = duracion_1, dur2 = duracion_2, dur3 = duracion_3) %>%
   arrange(fecha_final)
 
+
+duracion_total <- round(sum(tb$dur_total))
+duracion_media <- duracion_total/nrow(tb)
+alumnos_total <- sum(tb$alumnos)
+alumnos_media <- round(alumnos_total/nrow(tb))
+
+
+
 tb_table <- tb %>%
   mutate(perfil = paste(cursos, "-", conocimiento)) %>%
   select(`Año-sesión` = num_sesion, 
@@ -38,6 +46,7 @@ tb_table <- tb %>%
          `Perfil alumnos`=perfil)
 
 kable(tb_table)
+
 
 # Add these packages in the latex source document
 # \usepackage{graphicx}
@@ -49,11 +58,13 @@ kable(tb_table)
 
 # Use the above command to generate the table in latex for the paper
 kable(tb_table,
-      
       format = "latex", 
       booktabs = TRUE, 
       escape = TRUE,
-      caption = "Lisa y descripción de las sesiones") %>%
+      caption = paste0("Lista y descripción de las sesiones.",
+                       " Total alumnos: ", alumnos_total, 
+                       " ;Media alumnos por sesion: ", alumnos_media,
+                       " ;Duración media sesión (minutos): ", duracion_media)) %>%
   kable_styling(position = "center", 
                 font_size = 7,
                 latex_options = c("striped","hold_position"))
