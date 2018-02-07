@@ -53,7 +53,7 @@ kable(tb_table,
       format = "latex", 
       booktabs = TRUE, 
       escape = TRUE,
-      caption = "Descripción de las sesiones") %>%
+      caption = "Lisa y descripción de las sesiones") %>%
   kable_styling(position = "center", 
                 font_size = 7,
                 latex_options = c("striped","hold_position"))
