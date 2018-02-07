@@ -32,7 +32,7 @@ tb <- tb %>%
 
 
 duracion_total <- round(sum(tb$dur_total))
-duracion_media <- duracion_total/nrow(tb)
+duracion_media <- round(duracion_total/nrow(tb))
 alumnos_total <- sum(tb$alumnos)
 alumnos_media <- round(alumnos_total/nrow(tb))
 
@@ -61,10 +61,10 @@ kable(tb_table,
       format = "latex", 
       booktabs = TRUE, 
       escape = TRUE,
-      caption = paste0("Lista y descripción de las sesiones.",
-                       " Total alumnos: ", alumnos_total, 
-                       " ;Media alumnos por sesion: ", alumnos_media,
-                       " ;Duración media sesión (minutos): ", duracion_media)) %>%
+      caption = paste0("Lista y descripción de las sesiones. ",
+                       "Total alumnos: ", alumnos_total, 
+                       "; Media alumnos por sesión: ", alumnos_media,
+                       "; Duración media sesión (minutos): ", duracion_media)) %>%
   kable_styling(position = "center", 
                 font_size = 7,
                 latex_options = c("striped","hold_position"))
