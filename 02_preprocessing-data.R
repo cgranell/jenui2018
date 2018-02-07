@@ -61,7 +61,7 @@ kable(tb_table,
       format = "latex", 
       booktabs = TRUE, 
       escape = TRUE,
-      caption = paste0("Lista y descripción de las sesiones. ",
+      caption = paste0("Lista sesiones. ",
                        "Total alumnos: ", alumnos_total, 
                        "; Media alumnos por sesión: ", alumnos_media,
                        "; Duración media sesión (minutos): ", duracion_media)) %>%
