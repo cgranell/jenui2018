@@ -72,14 +72,14 @@ kable(tb_table,
 
 ##### SUMMARY TABLE: type of intervetions per year
 
-text_tbl <- data.frame(
+tb_intervenciones <- data.frame(
   secciones = c("A", "B", "C"),
   tangible2017 = c(
     "Sí",
     "Sí",
     "Sí"),
   social2017 = c(
-    "individual y grupo",
+    "indiv. + grupo",
     "grupo",
     "grupo"),
   tangible2018 = c(
@@ -87,16 +87,31 @@ text_tbl <- data.frame(
     "Sí",
     "Sí"),
   social2018 = c(
-    "individual y grupo",
-    "grupo + roles",
-    "grupo + roles")
+    "indiv. + grupo",
+    "grupo  + roles",
+    "grupo  + roles")
 )
 
-kable(text_tbl)
-kable(text_tbl, format = "latex", booktabs = T) %>%
+tb_intervenciones_table <- tb_intervenciones %>%
+  select(`Seción` = secciones, 
+         `Tangible` = tangible2017, 
+         `Social`=social2017,
+         `Tangible` = tangible2018,
+         `Social`=social2018)
+
+kable(tb_intervenciones_table)
+
+
+kable(tb_intervenciones_table, 
+      format = "latex", 
+      booktabs = TRUE, 
+      escape = TRUE,
+      caption = "Tipo de intervenciones.") %>%
   add_header_above(c(" ", "2017" = 2, "2018" = 2)) %>%
-  kable_styling(full_width = F) %>%
-  column_spec(1, bold = T)
+  kable_styling(position = "center", 
+              font_size = 7,
+              latex_options = c("striped","hold_position"))
+
 
 
 
