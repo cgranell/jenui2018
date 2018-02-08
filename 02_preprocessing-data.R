@@ -70,7 +70,7 @@ kable(tb_table,
                 latex_options = c("striped","hold_position"))
 
 
-##### SUMMARY TABLE: type of intervetions per year
+##### SUMMARY TABLE: type of interventions per year
 
 tb_intervenciones <- data.frame(
   secciones = c("A", "B", "C"),
@@ -101,7 +101,7 @@ tb_intervenciones_table <- tb_intervenciones %>%
 
 kable(tb_intervenciones_table)
 
-
+# Use the above command to generate the table in latex for the paper
 kable(tb_intervenciones_table, 
       format = "latex", 
       booktabs = TRUE, 
@@ -116,7 +116,7 @@ kable(tb_intervenciones_table,
 
 
 
-# Temporal distribution of each section per session
+###### Temporal distribution of each section per session
 tb_dur <- tb %>%
   select(-chicos, -chicas, -conocimiento, -cursos, -lugar) %>%
   select(num_sesion, fecha_final, anyo, everything())
