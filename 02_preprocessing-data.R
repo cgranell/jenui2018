@@ -70,6 +70,37 @@ kable(tb_table,
                 latex_options = c("striped","hold_position"))
 
 
+##### SUMMARY TABLE: type of intervetions per year
+
+text_tbl <- data.frame(
+  secciones = c("A", "B", "C"),
+  tangible2017 = c(
+    "Sí",
+    "Sí",
+    "Sí"),
+  social2017 = c(
+    "individual y grupo",
+    "grupo",
+    "grupo"),
+  tangible2018 = c(
+    "Sí",
+    "Sí",
+    "Sí"),
+  social2018 = c(
+    "individual y grupo",
+    "grupo + roles",
+    "grupo + roles")
+)
+
+kable(text_tbl)
+kable(text_tbl, format = "latex", booktabs = T) %>%
+  add_header_above(c(" ", "2017" = 2, "2018" = 2)) %>%
+  kable_styling(full_width = F) %>%
+  column_spec(1, bold = T)
+
+
+
+
 # Temporal distribution of each section per session
 tb_dur <- tb %>%
   select(-chicos, -chicas, -conocimiento, -cursos, -lugar) %>%
