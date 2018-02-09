@@ -161,7 +161,7 @@ ggplot(tb_dur, aes(x=num_sesion, y=porcentaje)) +
   # coord_flip() +
   scale_y_continuous(labels = dollar_format(suffix = "%", prefix="")) +
   labs(x = "Sesiones (año - número)", y="Porcentaje (%)") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5, hjust=0.5))
   # ggtitle("Ditribución temporal de secciones por sesión (%)")
   
 
