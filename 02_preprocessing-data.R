@@ -43,6 +43,8 @@ tb_table <- tb %>%
   select(`Año-sesión` = num_sesion, 
          `Duración (min)` = dur_total, 
          `Num. alumnos `=alumnos, 
+         `M` = chicos,
+         `F` =chicas, 
          `Perfil alumnos`=perfil)
 
 kable(tb_table)
