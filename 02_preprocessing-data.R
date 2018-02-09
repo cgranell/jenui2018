@@ -93,7 +93,7 @@ tb_intervenciones <- data.frame(
 )
 
 tb_intervenciones_table <- tb_intervenciones %>%
-  select(`Seción` = secciones, 
+  select(`Sección` = secciones, 
          `Tangible` = tangible2017, 
          `Social`=social2017,
          `Tangible` = tangible2018,
@@ -141,7 +141,7 @@ cols_asistencia <- c("Superior media" = "#a6611a", "Inferior media" = "#dfc27d")
 
 
 tb_dur$tipo_seccion <- factor(tb_dur$tipo_seccion, level = unique(tb_dur$tipo_seccion),
-                               labels = c("Explicación profesor", "Proyecto guiado", "Proyecto libre"))
+                               labels = c("A - Explicación profesor", "B - Proyecto guiado", "C - Proyecto libre"))
 
 
 # http://t-redactyl.io/blog/2016/01/creating-plots-in-r-using-ggplot2-part-4-stacked-bar-plots.html
@@ -159,8 +159,8 @@ ggplot(tb_dur, aes(x=num_sesion, y=porcentaje)) +
   # coord_flip() +
   scale_y_continuous(labels = dollar_format(suffix = "%", prefix="")) +
   labs(x = "Sesiones (año - número)", y="Porcentaje (%)") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  ggtitle("Ditribución temporal de secciones por sesión (%)")
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  # ggtitle("Ditribución temporal de secciones por sesión (%)")
   
 
 # Save stacked bar chart
