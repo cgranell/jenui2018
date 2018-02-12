@@ -9,7 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Carlos Granell" />
 
+<meta name="date" content="2018-02-12" />
 
 <title>Codigo asociado al artioculo enviado a JENUI 2018</title>
 
@@ -118,13 +120,15 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Codigo asociado al artioculo enviado a JENUI 2018</h1>
+<h4 class="author"><em>Carlos Granell</em></h4>
+<h4 class="date"><em>12 Feb 2018</em></h4>
 
 </div>
 
 
-<div id="cargamos-datos" class="section level2">
-<h2>Cargamos datos</h2>
-<p>Observaciones tomadas en papel durante las sesiones realizadas con estudaintes de secundaria y bachillre. Datos en “tidy form”</p>
+<div id="carga-datos" class="section level2">
+<h2>Carga datos</h2>
+<p>Observaciones tomadas en papel durante las sesiones realizadas con estudiantes de secundaria y bachiller. Datos en “tidy form”</p>
 <pre class="r"><code>file_name &lt;- &quot;datos-practica-uji.csv&quot;
 data_path &lt;- here::here(&quot;data&quot;, file_name)
 
@@ -137,8 +141,8 @@ tb &lt;- tb %&gt;%
   rename(num_sesion = id, dur_total = duracion, dur1 = duracion_1, dur2 = duracion_2, dur3 = duracion_3) %&gt;%
   arrange(fecha_final)</code></pre>
 </div>
-<div id="tabla-1.-lsita-de-sesiones" class="section level2">
-<h2>Tabla 1. Lsita de sesiones</h2>
+<div id="tabla-1.-lista-de-sesiones" class="section level2">
+<h2>Tabla 1. Lista de sesiones</h2>
 <pre class="r"><code>duracion_total &lt;- round(sum(tb$dur_total))
 duracion_media &lt;- round(duracion_total/nrow(tb))
 alumnos_total &lt;- sum(tb$alumnos)
@@ -359,8 +363,8 @@ kable(tb_intervenciones_table,
 
 <p></p>
 </div>
-<div id="figura-4.-estadisticas" class="section level2">
-<h2>Figura 4. Estadisticas</h2>
+<div id="figura-4.-distribuciones-temporal-de-seccion-por-sesion.-numero-participantes-por-sesion" class="section level2">
+<h2>Figura 4. Distribuciones temporal de sección por sesión. Número participantes por sesión</h2>
 <pre class="r"><code>tb_dur &lt;- tb %&gt;%
   select(-chicos, -chicas, -conocimiento, -cursos, -lugar) %&gt;%
   select(num_sesion, fecha_final, anyo, everything())
@@ -443,10 +447,11 @@ ggsave(data_path, dpi = 600)</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] bindrcpp_0.2     scales_0.5.0     kableExtra_0.7.0 knitr_1.18      
-##  [5] lubridate_1.7.1  here_0.1         forcats_0.2.0    stringr_1.2.0   
-##  [9] dplyr_0.7.4      purrr_0.2.4      readr_1.1.1      tidyr_0.7.2     
-## [13] tibble_1.4.1     ggplot2_2.2.1    tidyverse_1.2.1  pacman_0.4.6    
+##  [1] bindrcpp_0.2     pdftools_1.5     scales_0.5.0     kableExtra_0.7.0
+##  [5] knitr_1.18       lubridate_1.7.1  here_0.1         forcats_0.2.0   
+##  [9] stringr_1.2.0    dplyr_0.7.4      purrr_0.2.4      readr_1.1.1     
+## [13] tidyr_0.7.2      tibble_1.4.1     ggplot2_2.2.1    tidyverse_1.2.1 
+## [17] pacman_0.4.6    
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] tidyselect_0.2.3   reshape2_1.4.3     haven_1.1.0       

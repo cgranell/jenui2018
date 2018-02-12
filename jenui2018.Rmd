@@ -1,5 +1,7 @@
 ---
 title: "Codigo asociado al artioculo enviado a JENUI 2018"
+author: "Carlos Granell"
+date: "12 Feb 2018"
 output:
   html_document: default
   html_notebook: default
@@ -21,18 +23,19 @@ p_load(
   "knitr",
   "kableExtra",
   "scales",
-  "knitr"
+  "knitr", 
+  "pdftools"
 )
-# library(pdftools)
+# library()
 # library(stringr)
 # library(knitr)
 # library(tidytext)
 
 ```
 
-## Cargamos datos 
+## Carga datos 
 
-Observaciones tomadas en papel durante las sesiones realizadas con estudaintes de secundaria y bachillre. Datos en "tidy form"
+Observaciones tomadas en papel durante las sesiones realizadas con estudiantes de secundaria y bachiller. Datos en "tidy form"
 
 ```{r, message=FALSE, warning=FALSE}
 file_name <- "datos-practica-uji.csv"
@@ -50,7 +53,7 @@ tb <- tb %>%
 
 ```
 
-## Tabla 1. Lsita de sesiones  
+## Tabla 1. Lista de sesiones  
 
 ```{r, message=FALSE, warning=FALSE}
 
@@ -149,7 +152,7 @@ kable(tb_intervenciones_table,
 ```
 
 
-## Figura 4. Estadisticas 
+## Figura 4. Distribuciones temporal de sección por sesión. Número participantes por sesión 
 
 ```{r}
 tb_dur <- tb %>%
