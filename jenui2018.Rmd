@@ -19,11 +19,12 @@ p_load(
   "here",
   "lubridate",
   "knitr",
-  "kableExtra"
+  "kableExtra",
+  "scales",
+  "knitr"
 )
 # library(pdftools)
 # library(stringr)
-# library(tidyverse)
 # library(knitr)
 # library(tidytext)
 
@@ -31,34 +32,184 @@ p_load(
 
 ## Cargamos datos 
 
-Observations taken during programming sessions with students were collected on paper and digitally stored in a csv file. Create tidy data structure form file
+Observaciones tomadas en papel durante las sesiones realizadas con estudaintes de secundaria y bachillre. Datos en "tidy form"
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 file_name <- "datos-practica-uji.csv"
 data_path <- here::here("data", file_name)
 
 tb <- read_csv(data_path)
-head(tb, 8)
-
 
 tb <- tb %>%
-  mutate(date = as.Date(fecha, format = "%d/%m/%Y"),
-         year = year(ymd(date)),
-         duracion_media = mean (duracion))
-
-# https://cran.r-project.org/web/packages/kableExtra/README.html
-kable(tb %>% select(-duracion_1, -duracion_2, -duracion_3, -chicos, -chicas, -conocimiento, -lugar, -date, -duracion_media),
-      format = "html", 
-      booktabs = TRUE, 
-      caption = "Lista de sesiones con ") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE)
-  #kable_styling(latex_options = c("striped", "hold_position"), full_width = FALSE)
-
+  mutate(fecha_final = lubridate::dmy(fecha), 
+         anyo = year(fecha_final)) %>%
+  select(-fecha) %>%
+  rename(num_sesion = id, dur_total = duracion, dur1 = duracion_1, dur2 = duracion_2, dur3 = duracion_3) %>%
+  arrange(fecha_final)
 
 
 ```
 
-## Resources
+## Tabla 1. Lsita de sesiones  
+
+```{r, message=FALSE, warning=FALSE}
+
+duracion_total <- round(sum(tb$dur_total))
+duracion_media <- round(duracion_total/nrow(tb))
+alumnos_total <- sum(tb$alumnos)
+alumnos_media <- round(alumnos_total/nrow(tb))
+
+
+tb_table <- tb %>%
+  mutate(perfil = paste(cursos, "-", conocimiento)) %>%
+  select(`Año-sesión` = num_sesion, 
+         `Duración (min)` = dur_total, 
+         `Num. alumnos `=alumnos, 
+         `M` = chicos,
+         `F` =chicas, 
+         `Perfil alumnos`=perfil)
+
+kable(tb_table)
+
+```
+
+```{r}
+
+# Add these packages in the latex source document
+# \usepackage{graphicx}
+# \usepackage{booktabs}
+# \usepackage{colortbl}
+# \usepackage[table]{xcolor}
+
+# https://cran.r-project.org/web/packages/kableExtra/README.html
+
+# Use the above command to generate the table in latex for the paper
+kable(tb_table,
+      format = "latex", 
+      booktabs = TRUE, 
+      escape = TRUE,
+      caption = paste0("Lista sesiones. ",
+                       "Total alumnos: ", alumnos_total, 
+                       "; Media alumnos por sesión: ", alumnos_media,
+                       "; Duración media sesión (minutos): ", duracion_media)) %>%
+  kable_styling(position = "center", 
+                font_size = 7,
+                latex_options = c("striped","hold_position"))
+```
+
+## Tabla 2. Tipos de intervenciones
+
+
+```{r}
+tb_intervenciones <- data.frame(
+  secciones = c("A", "B", "C"),
+  tangible2017 = c(
+    "Sí",
+    "Sí",
+    "Sí"),
+  social2017 = c(
+    "indiv. + grupo",
+    "grupo",
+    "grupo"),
+  tangible2018 = c(
+    "Sí",
+    "Sí",
+    "Sí"),
+  social2018 = c(
+    "indiv. + grupo",
+    "grupo  + roles",
+    "grupo  + roles")
+)
+
+tb_intervenciones_table <- tb_intervenciones %>%
+  select(`Sección` = secciones, 
+         `Tangible` = tangible2017, 
+         `Social`=social2017,
+         `Tangible` = tangible2018,
+         `Social`=social2018)
+
+kable(tb_intervenciones_table)
+
+```
+
+
+```{r}
+
+# Use the above command to generate the table in latex for the paper
+kable(tb_intervenciones_table, 
+      format = "latex", 
+      booktabs = TRUE, 
+      escape = TRUE,
+      caption = "Tipo de intervenciones.") %>%
+  add_header_above(c(" ", "2017" = 2, "2018" = 2)) %>%
+  kable_styling(position = "center", 
+              font_size = 7,
+              latex_options = c("striped","hold_position"))
+
+```
+
+
+## Figura 4. Estadisticas 
+
+```{r}
+tb_dur <- tb %>%
+  select(-chicos, -chicas, -conocimiento, -cursos, -lugar) %>%
+  select(num_sesion, fecha_final, anyo, everything())
+
+tb_dur <- tb_dur %>%
+  gather(dur1, dur2, dur3, key = "tipo_seccion", value = "dur_seccion")
+
+tb_dur <- tb_dur %>%
+  mutate (porcentaje = round(dur_seccion / dur_total, 2) * 100)
+
+media_alumnos <- mean(tb_dur$alumnos)  
+tb_dur <- tb_dur %>%
+  group_by(num_sesion)  %>%
+  # mutate (pos = cumsum(porcentaje) - (0.5 * porcentaje)) %>%
+  mutate (asistencia = ifelse(alumnos > media_alumnos, "mayor", "menor")) %>%
+  arrange(desc(fecha_final), tipo_seccion)
+  
+tb_dur$asistencia <- factor(tb_dur$asistencia, level = unique(tb_dur$asistencia),
+                              labels = c("Superior media", "Inferior media"))
+
+cols_asistencia <- c("Superior media" = "#a6611a", "Inferior media" = "#dfc27d")
+
+
+tb_dur$tipo_seccion <- factor(tb_dur$tipo_seccion, level = unique(tb_dur$tipo_seccion),
+                               labels = c("A - Explicación profesor", "B - Proyecto guiado", "C - Proyecto libre"))
+
+
+# http://t-redactyl.io/blog/2016/01/creating-plots-in-r-using-ggplot2-part-4-stacked-bar-plots.html
+ggplot(tb_dur, aes(x=num_sesion, y=porcentaje)) + 
+  geom_bar(aes(fill = tipo_seccion), stat = "identity", position= position_stack(reverse = TRUE)) +
+  geom_point(aes(x=num_sesion, y=alumnos, colour=asistencia)) +
+  scale_fill_brewer(palette = "Set3") + theme_bw() +
+  scale_colour_manual(values = cols_asistencia) +
+  geom_text(aes(x=num_sesion, y=alumnos, label = alumnos), size=2, vjust = 1, nudge_y = -1) +
+  geom_text(aes(x=num_sesion, y=porcentaje, label = ifelse(porcentaje>0, paste(porcentaje, "%"), "")), 
+            position = position_stack(vjust = 0.5)) +
+  theme(legend.position="bottom", 
+        legend.direction="vertical",
+        legend.title = element_blank()) +
+  # coord_flip() +
+  scale_y_continuous(labels = dollar_format(suffix = "%", prefix="")) +
+  labs(x = "Sesiones (año - número)", y="Porcentaje (%)") +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5, hjust=0.5))
+  # ggtitle("Ditribución temporal de secciones por sesión (%)")
+  
+
+```
+
+
+```{r}
+# Save stacked bar chart
+file_name <- "porcentaje_secciones.png"
+data_path <- here::here("figs", file_name)
+ggsave(data_path, dpi = 600)
+```
+
+
+## Recursos
 
 * https://rpubs.com/edgarruiz/tidytext
 * https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html
