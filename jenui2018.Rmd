@@ -1,5 +1,5 @@
 ---
-title: "Analysing SUCRE4Kids experimenta data for JENUI 2018"
+title: "Codigo asociado al artioculo enviado a JENUI 2018"
 output:
   html_document: default
   html_notebook: default
@@ -29,7 +29,7 @@ p_load(
 
 ```
 
-## Load data
+## Cargamos datos 
 
 Observations taken during programming sessions with students were collected on paper and digitally stored in a csv file. Create tidy data structure form file
 
