@@ -5,4 +5,5 @@ El fichero [jenui2018.Rmd](jenui2018.Rmd) es la version Rmarkdown del análisis.
 
 ## Actualización 25 Febrero 2019.
 
-* Se añaden las datos de asistencia para la edicion de 2019.
+* Se añaden las datos de asistencia para la edición de 2019 de **Practica La UJI**.
+* Se crea el R notebook [ticai2018.Rmd](ticai2018.Rmd), con ligeros cambios (año 2019, tratamiento superposición texto en ggplot) con respecto al de jenui2018.

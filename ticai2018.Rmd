@@ -1,4 +1,14 @@
+---
+title: "Codigo asociado al capitulo de libro enviado a TICAI2018"
+author: "Carlos Granell"
+date: "25 Feb 2019"
+output:
+  html_document: default
+  html_notebook: default
+  pdf_document: default
+---
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # pacman package management tool to install and load the package dependencies.
 if(!require(pacman)) {
   install.packages("pacman")
@@ -10,13 +20,24 @@ p_load(
   "tidyverse",
   "here",
   "lubridate",
-  "highcharter",
   "knitr",
-  "kableExtra", 
+  "kableExtra",
   "scales",
-  "viridis"
+  "knitr", 
+  "pdftools"
 )
+# library()
+# library(stringr)
+# library(knitr)
+# library(tidytext)
 
+```
+
+## Carga datos 
+
+Observaciones tomadas en papel durante las sesiones realizadas con estudiantes de secundaria y bachiller. Datos en "tidy form"
+
+```{r, message=FALSE, warning=FALSE}
 file_name <- "datos-practica-uji.csv"
 data_path <- here::here("data", file_name)
 
@@ -24,18 +45,22 @@ tb <- read_csv(data_path)
 
 tb <- tb %>%
   mutate(fecha_final = lubridate::dmy(fecha), 
-           # date= as.Date(fecha, format = "%d/%m/%Y"),
          anyo = year(fecha_final)) %>%
   select(-fecha) %>%
   rename(num_sesion = id, dur_total = duracion, dur1 = duracion_1, dur2 = duracion_2, dur3 = duracion_3) %>%
   arrange(fecha_final)
 
 
+```
+
+## Tabla 1. Lista de sesiones  
+
+```{r, message=FALSE, warning=FALSE}
+
 duracion_total <- round(sum(tb$dur_total))
 duracion_media <- round(duracion_total/nrow(tb))
 alumnos_total <- sum(tb$alumnos)
 alumnos_media <- round(alumnos_total/nrow(tb))
-
 
 
 tb_table <- tb %>%
@@ -49,6 +74,9 @@ tb_table <- tb %>%
 
 kable(tb_table)
 
+```
+
+```{r}
 
 # Add these packages in the latex source document
 # \usepackage{graphicx}
@@ -70,10 +98,12 @@ kable(tb_table,
   kable_styling(position = "center", 
                 font_size = 7,
                 latex_options = c("striped","hold_position"))
+```
+
+## Tabla 2. Tipos de intervenciones
 
 
-##### SUMMARY TABLE: type of interventions per year
-
+```{r}
 tb_intervenciones <- data.frame(
   secciones = c("A", "B", "C"),
   tangible2017 = c(
@@ -92,7 +122,7 @@ tb_intervenciones <- data.frame(
     "indiv. + grupo",
     "grupo  + roles",
     "grupo  + roles"),
-  tangible2019 = c(
+    tangible2019 = c(
     "Sí",
     "Sí",
     "Sí"),
@@ -108,10 +138,15 @@ tb_intervenciones_table <- tb_intervenciones %>%
          `Social`=social2017,
          `Tangible` = tangible2018,
          `Social`=social2018,
-         `Tangible` = tangible2019,
+          `Tangible` = tangible2019,
          `Social`=social2019)
 
 kable(tb_intervenciones_table)
+
+```
+
+
+```{r}
 
 # Use the above command to generate the table in latex for the paper
 kable(tb_intervenciones_table, 
@@ -119,16 +154,17 @@ kable(tb_intervenciones_table,
       booktabs = TRUE, 
       escape = TRUE,
       caption = "Tipo de intervenciones.") %>%
-  add_header_above(c(" ", "2017" = 2, "2018" = 2, "2019" = 2)) %>%
+  add_header_above(c(" ", "2017" = 2, "2018" = 2,"2019" = 2)) %>%
   kable_styling(position = "center", 
               font_size = 7,
               latex_options = c("striped","hold_position"))
 
+```
 
 
+## Figura 4. Distribuciones temporal de sección por sesión. Número participantes por sesión 
 
-
-###### Temporal distribution of each section per session
+```{r}
 tb_dur <- tb %>%
   select(-chicos, -chicas, -conocimiento, -cursos, -lugar) %>%
   select(num_sesion, fecha_final, anyo, everything())
@@ -154,7 +190,8 @@ cols_asistencia <- c("Superior media" = "#a6611a", "Inferior media" = "#dfc27d")
 
 tb_dur$tipo_seccion <- factor(tb_dur$tipo_seccion, level = unique(tb_dur$tipo_seccion),
                                labels = c("A - Explicación profesor", "B - Proyecto guiado", "C - Proyecto libre"))
-  
+
+
 # http://t-redactyl.io/blog/2016/01/creating-plots-in-r-using-ggplot2-part-4-stacked-bar-plots.html
 ggplot(tb_dur, aes(x=num_sesion, y=porcentaje)) + 
   geom_bar(aes(fill = tipo_seccion), stat = "identity", position= position_stack(reverse = TRUE)) +
@@ -174,41 +211,30 @@ ggplot(tb_dur, aes(x=num_sesion, y=porcentaje)) +
   # ggtitle("Ditribución temporal de secciones por sesión (%)")
   
 
+```
+
+
+```{r}
 # Save stacked bar chart
 file_name <- "porcentaje_secciones.png"
 data_path <- here::here("figs", file_name)
 ggsave(data_path, dpi = 600)
+```
 
 
+## Recursos
 
+* https://rpubs.com/edgarruiz/tidytext
+* https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html
+* https://onertipaday.blogspot.de/2011/07/word-cloud-in-r.html
+* [Create Awesome HTML Table with knitr::kable() and kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html)
+* [Create Awesome LaTeX Table with knitr::kable() and kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_pdf.pdf)
 
-#####################3
+\newpage
+## Meta
 
-
-ggplot(evaldata_years_long, aes(year, value)) +
-  geom_bar(aes(fill = variable), stat = "identity") +
-  ylab("mean value") +
-
-dur_year <- tb %>%
-  group_by(year) %>%
-  summarise( 
-    count = n(),
-    dur_med = mean(dur_total, na.rm = TRUE),
-    dur1_per = sum(duracion_1) / sum(duracion),
-    dur2_per = sum(duracion_2) / sum(duracion),
-    dur3_per = sum(duracion_3) / sum(duracion)
-    )
-
-
-
-
-# https://cran.r-project.org/web/packages/kableExtra/README.html
-kable(tb %>% select(-duracion_1, -duracion_2, -duracion_3, -chicos, -chicas, -conocimiento, -lugar, -date, -duracion_media),
-      format = "latex", 
-      booktabs = TRUE, 
-      caption = "Sesiones") %>%
-  kable_styling(full_width = T)
-  #kable_styling(latex_options = "scale_down")
-  #kable_styling(latex_options = c("striped", "hold_position"), full_width = FALSE)
+```{r}
+sessionInfo()
+```
 
 
