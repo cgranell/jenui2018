@@ -88,7 +88,7 @@ kable(tb_table)
 
 # Use the above command to generate the table in latex for the paper
 kable(tb_table,
-      format = "latex", 
+      format = "html", 
       booktabs = TRUE, 
       escape = TRUE,
       caption = paste0("Lista sesiones. ",
@@ -96,8 +96,8 @@ kable(tb_table,
                        "; Media alumnos por sesión: ", alumnos_media,
                        "; Duración media sesión (minutos): ", duracion_media)) %>%
   kable_styling(position = "center", 
-                font_size = 7,
-                latex_options = c("striped","hold_position"))
+                font_size = 7)
+                # html_options = c("striped","hold_position"))
 ```
 
 ## Tabla 2. Tipos de intervenciones
@@ -150,14 +150,14 @@ kable(tb_intervenciones_table)
 
 # Use the above command to generate the table in latex for the paper
 kable(tb_intervenciones_table, 
-      format = "latex", 
+      format = "html", 
       booktabs = TRUE, 
       escape = TRUE,
       caption = "Tipo de intervenciones.") %>%
   add_header_above(c(" ", "2017" = 2, "2018" = 2,"2019" = 2)) %>%
   kable_styling(position = "center", 
-              font_size = 7,
-              latex_options = c("striped","hold_position"))
+              font_size = 7)
+              # latex_options = c("striped","hold_position"))
 
 ```
 
