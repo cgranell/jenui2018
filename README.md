@@ -3,3 +3,6 @@ Script para la generación de tablas y figuras estadísticas, junto con los dato
 
 El fichero [jenui2018.Rmd](jenui2018.Rmd) es la version Rmarkdown del análisis. Tambien en formato [html](jenui2018.html) 
 
+## Actualización 25 Febrero 2019.
+
+* Se añaden las datos de asistencia para la edicion de 2019.
